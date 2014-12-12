@@ -95,7 +95,7 @@ class Conductor(object):
 
             try:
                 self.bootstrap(self.juju_env, self.args.setup_timeout)
-            except Exception, e:
+            except Exception as e:
                 self.log.warn('Could not bootstrap %s, got %s. Skipping' %
                               (self.juju_env, e))
                 self.errors += 1
@@ -268,17 +268,17 @@ class Orchestra(object):
             with timeout(self.conductor.args.timeout):
                 output = subprocess.check_output(self.test, env=self.env)
                 self.log.debug(output)
-        except TimeoutError, e:
+        except TimeoutError as e:
             self.log.debug('Killed by timeout after %s seconds',
                            self.conductor.args.timeout)
             self.print_status(124)
             error = e if not self.is_passing_code(124) else e
-        except subprocess.CalledProcessError, e:
+        except subprocess.CalledProcessError as e:
             self.log.debug('Got exit code: %s', e.returncode)
             self.print_status(e.returncode)
             error = TestingError(e.returncode) if not \
                 self.is_passing_code(e.returncode) else e
-        except Exception, e:
+        except Exception as e:
             self.log.debug('Encountered unexpected error %s', e)
             self.print_status(9001)
             error = e
@@ -288,7 +288,7 @@ class Orchestra(object):
         if self.conductor.args.logdir:
             try:
                 self.archive_logs()
-            except OrchestraError, e:
+            except OrchestraError as e:
                 self.log.error(e)
 
         if error:

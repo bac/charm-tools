@@ -138,11 +138,11 @@ def main():
                 try:
                     os.rename(o.name, full_outfile)
                     os.unlink(backupname)
-                except Exception, e:
+                except Exception as e:
                     print "WARNING: Could not enable templated file: " + str(e)
                     os.rename(backupname, full_outfile)
                     raise
-            except Exception, e:
+            except Exception as e:
                 print "WARNING: could not process template for " \
                     + full_outfile + ": " + str(e)
                 raise

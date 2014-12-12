@@ -156,7 +156,7 @@ def get_lp_charm_series(lp, series):
         try:
             charm_series = charm_distro.getSeries(
                 name_or_version=series)
-        except (BadRequest, NotFound), e:
+        except (BadRequest, NotFound) as e:
             # XXX flacoste 2011-06-15 bug=797917
             # Should only be NotFound.
             if e.content.startswith('No such distribution series:'):
