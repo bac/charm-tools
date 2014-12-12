@@ -17,6 +17,7 @@ the appropriate options to ``use_setuptools()``.
 
 This file can also be run as a script to install or upgrade setuptools.
 """
+from __future__ import print
 import sys
 DEFAULT_VERSION = "0.6c11"
 DEFAULT_URL = "http://pypi.python.org/packages/%s/s/setuptools/" \
@@ -121,12 +122,12 @@ def use_setuptools(
         return
     except pkg_resources.VersionConflict as e:
         if was_imported:
-            print >>sys.stderr, (
-            "The required version of setuptools (>=%s) is not available, and\n"
-            "can't be installed while this script is running. Please install\n"
-            " a more recent version first, using 'easy_install -U setuptools'."
-            "\n\n(Currently using %r)"
-            ) % (version, e.args[0])
+            print(
+                "The required version of setuptools (>={}) is not available, and\n"
+                "can't be installed while this script is running. Please install\n"
+                " a more recent version first, using 'easy_install -U setuptools'."
+                "\n\n(Currently using {})".format(version, e.args[0]),
+                file=sys.stderr)
             sys.exit(2)
         else:
             del pkg_resources, sys.modules['pkg_resources']    # reload ok
@@ -206,10 +207,10 @@ def main(argv, version=DEFAULT_VERSION):
                 os.unlink(egg)
     else:
         if setuptools.__version__ == '0.0.1':
-            print >>sys.stderr, (
-            "You have an obsolete version of setuptools installed.  Please\n"
-            "remove it from your system entirely before rerunning this script."
-            )
+            print(
+                "You have an obsolete version of setuptools installed.  Please\n"
+                "remove it from your system entirely before rerunning this script.",
+                file=sys.stderr)
             sys.exit(2)
 
     req = "setuptools>=" + version
@@ -228,9 +229,9 @@ def main(argv, version=DEFAULT_VERSION):
             from setuptools.command.easy_install import main
             main(argv)
         else:
-            print "Setuptools version", version, "or greater has been " \
-                + "installed."
-            print '(Run "ez_setup.py -U setuptools" to reinstall or upgrade.)'
+            print("Setuptools version {} or greater has been "
+                  "installed.".format(version))
+            print('(Run "ez_setup.py -U setuptools" to reinstall or upgrade.)')
 
 
 def update_md5(filenames):
@@ -256,7 +257,7 @@ def update_md5(filenames):
 
     match = re.search("\nmd5_data = {\n([^}]+)}", src)
     if not match:
-        print >>sys.stderr, "Internal error!"
+        print("Internal error!", file=sys.stderr)
         sys.exit(2)
 
     src = src[:match.start(1)] + repl + src[match.end(1):]
